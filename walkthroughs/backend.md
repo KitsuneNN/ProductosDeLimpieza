@@ -1,19 +1,22 @@
 # WALKTHROUGH — 🔧 Backend
 
-## [2026-08-13] - B-T1: Scaffold FastAPI + conexión DB + healthcheck
+## [2026-08-13] - B-T2..B-T6: API completa
 ### ✅ Implementado
-- Archivos: `backend/app/main.py`, `backend/app/core/config.py` (Settings pydantic-settings, .env, CORS), `backend/app/db/session.py` (motor async + get_db), `backend/app/api/health.py` (ping a BD), `backend/app/api/router.py`, `backend/requirements.txt`, `backend/.env.example`
-- CORS configurable por `CORS_ORIGINS`; URL async por `DATABASE_URL` (sqlite dev / postgresql+asyncpg prod)
-- Alembic `env.py` ahora convierte URLs async→sync para migraciones (sqlite+aiosqlite→sqlite, postgresql+asyncpg→postgresql+psycopg)
+- **B-T2 Auth:** `core/security.py` (bcrypt + PyJWT), `core/deps.py` (get_current_user / require_admin), `api/auth.py` (registro/login/me), `db/seed_admin.py` (admin idempotente)
+- **B-T3 Productos:** `api/products_admin.py` (CRUD admin + estado + imagen), `services/images.py` (Cloudinary con fallback local `/uploads` + validaciones)
+- **B-T4 Catálogo:** `api/catalogo.py` (categorías + catálogo paginado/filtros), `services/availability.py` (etiquetas contra umbral)
+- **B-T5 Solicitudes:** `api/requests.py` (cliente + admin), `services/requests.py` (crear con snapshot de precios, cancelar con máquina de estados)
+- **B-T6 Pago+WS:** `services/checkout.py` (SELECT FOR UPDATE, 409 con faltantes, descuento solo al pagar), `ws/manager.py` + `ws/route.py` (broadcast por rol, serializador Decimal→float), `api/config_admin.py` (umbral configurable con re-etiquetado en vivo)
 
 ### 🧪 Verificación
-- Ruta/comando: `cd backend && DATABASE_URL=postgresql+asyncpg://... .venv/bin/uvicorn app.main:app --host 0.0.0.0 --port 8000`
-- Pasos:
-  1. Migración `alembic upgrade head` sobre **PostgreSQL 17 real**: OK
-  2. Seed ×2 sobre PostgreSQL: 6 categorías, umbral=5, idempotente
-  3. Constraint de negocio probado: INSERT stock=-1 → **rechazado por la BD** (ck_productos_stock_no_negativo)
-  4. `GET /` → 200 app info · `GET /api/health` → 200 `{"status":"ok"}` (ping real a PG) · `/docs` → 200 · 404 uniforme `{"detail":"Not Found"}`
-- Resultado: exit 0 ✅
+- `pytest -q` → **28 passed** · cobertura services **95%**
+- E2E en vivo (PostgreSQL 17 real + WebSockets): **11/11** — ver walkthrough de QA
+- Bugs corregidos vía Debug Protocol: dominio `.local` inválido en admin · Decimal en payloads WS
+- Migración + seed sobre PostgreSQL verificado; constraint de stock negativo probada contra la BD
 
 ### ⏳ Estado
 ESPERANDO_APROBACIÓN_CHEF
+
+## [2026-08-13] - B-T1: Scaffold FastAPI + conexión DB + healthcheck
+### ⏳ Estado
+✅ APPROVED (verificado en turno anterior)

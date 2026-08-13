@@ -2,46 +2,53 @@
 
 ## 📌 Estado general
 - **Fecha:** 2026-08-13
-- **Fase:** 🔴 FASE CRÍTICA (infraestructura base)
+- **Fase:** 🟡/🟢 FASE ALTA COMPLETADA — frontend funcional en preview; restan QA-T2 (Vitest), QA-T3 (Playwright) y FASE FINAL (deploy/docs)
 - **Repo:** github.com/KitsuneNN/ProductosDeLimpieza — rama de trabajo: `chef-master/planificacion`
-- **Conexión GitHub:** ✅ SSH deploy key con write access verificada
+- **Previews vivos:** API server (:8000) + Frontend Next.js (:3000)
 
 ## 🚦 Línea de tiempo
 | Fecha | Evento | Estado |
 |-------|--------|--------|
-| 2026-08-13 | Conexión SSH + clone + verificación de push | ✅ OK |
-| 2026-08-13 | Recepción de requisitos (cuestionario IA central) | ✅ OK |
-| 2026-08-13 | Equipo de 5 agentes aprobado por el dueño | ✅ OK |
-| 2026-08-13 | ADR-001 ACEPTADO: Next.js 15 (UI) + FastAPI (API) + PostgreSQL + Cloudinary | ✅ OK |
-| 2026-08-13 | Deploy: sin cuentas aún → desarrollo local, preparar en FASE FINAL | ✅ OK |
-| 2026-08-13 | ARQ-T1: modelo de datos, migración, seed y ERD | ✅ APPROVED (auditoría: DDL congelado + paridad verificada) |
-| 2026-08-13 | ARQ-T2: schemas Pydantic + types TS + contrato API/WS | ✅ APPROVED (30 pares espejo + 4 eventos WS + tsc strict OK) |
-| 2026-08-13 | B-T1: scaffold FastAPI + PostgreSQL + healthcheck | 🟩 ESPERANDO_APROBACIÓN (servidor vivo, /api/health 200) |
+| 2026-08-13 | Conexión SSH + clone + verificación de push | ✅ |
+| 2026-08-13 | Requisitos recibidos + equipo de 5 agentes aprobado | ✅ |
+| 2026-08-13 | ADR-001 ACEPTADO: Next.js 16 (UI) + FastAPI (API) + PostgreSQL + Cloudinary | ✅ |
+| 2026-08-13 | ARQ-T1 (modelo de datos) y ARQ-T2 (contratos) | ✅ (2 auditorías) |
+| 2026-08-13 | B-T1 (scaffold) + B-T2 (auth) + B-T3 (productos) + B-T4 (catálogo) + B-T5 (solicitudes) + B-T6 (pago+WS) | ✅ E2E 11/11 |
+| 2026-08-13 | F-T1..F-T4: Next.js 16 completo (cliente + admin + QR) | 🟩 ESPERANDO_APROBACIÓN |
+| 2026-08-13 | QA-T1: pytest 28 tests, services 95% | ✅ |
+
+## 🧪 Cómo probar el sistema ahora (preview Arena)
+1. Abrir el preview **Frontend** (puerto 3000).
+2. **Admin:** entrar con `admin@limpieza.com` / `Admin#Limpieza2026` (solo dev) → panel con sonido.
+3. **Cliente:** crear cuenta desde "Crear mi cuenta" (o registrar por API) → catálogo con etiquetas → carrito → enviar pedido.
+4. Con las dos sesiones abiertas (admin en una pestaña, cliente en otra) se ve el flujo completo en vivo: sonido en el admin + etiquetas que cambian solas en el cliente.
+5. Para el sonido: hacer clic una vez en el panel (los navegadores exigen interacción antes de sonar).
+
+## 🔑 Credenciales de desarrollo (SOLO entorno local/sandbox)
+- Admin: `admin@limpieza.com` / `Admin#Limpieza2026`
+- Generar otro admin: `cd backend && ADMIN_EMAIL=... ADMIN_PASSWORD=... .venv/bin/python -m app.db.seed_admin`
+- Base de datos del sandbox: PostgreSQL 17 local (usuario `limpieza`)
 
 ## 🧾 Decisiones clave
-- **ADR-001 (ACEPTADO):** Next.js 15 App Router como capa UI (mobile-first) + FastAPI como API y WebSockets + PostgreSQL + Cloudinary (cuenta existente).
-- **Flujo Git:** ramas `chef-master/<tarea>`; nada directo a `main` sin aprobación del dueño.
-- **Deploy:** sin cuentas por ahora → desarrollo 100% local; FASE FINAL prepara Vercel/Render/Neon.
+- ADR-001 aceptado (Next.js 16 UI + FastAPI API + PostgreSQL + Cloudinary con fallback local).
+- Flujo Git: ramas `chef-master/<tarea>`; nada directo a `main` sin aprobación.
+- Deploy: sin cuentas aún → preparar en FASE FINAL (Vercel/Render/Neon).
+
+## 🐛 Bugs reales encontrados por las etapas de verificación (y corregidos)
+1. Migración acoplada al código (DDL congelado + verificador de paridad permanente).
+2. `email-validator` rechazaba el dominio `.local` del admin (login imposible) → `.com`.
+3. Broadcast WS con `Decimal` sin serializar → serializador central en el manager.
+4. Endpoint WS bajo `/api/ws` en vez de `/ws` (contrato) → movido.
+5. ERD Mermaid inválido · schemas faltantes del contrato · `.gitignore` débil · paridad modelos/migración.
 
 ## 📂 Convenciones del repo
-- Rama default: `main` (⚠️ pendiente cambio en GitHub Settings: hoy la default es la rama de test)
-- Ramas de trabajo: `chef-master/<tarea>`
-- Commits: Conventional Commits (`feat:`, `fix:`, `docs:`, `test:`, `chore:`)
-- Secretos: solo en `.env` (referencias en `.env.example`); nunca commitear credenciales
-- Idioma de UI, comentarios y docs: español
+- Rama default: `main` (⚠️ pendiente cambio en GitHub Settings — la default sigue siendo la rama de test)
+- Ramas de trabajo: `chef-master/<tarea>` · Commits Conventional Commits
+- Secretos solo en `.env` · Idioma español en UI/docs/comentarios
+- Verificadores permanentes: `backend/scripts/verify_contract.py` (Regla 5) y `verify_migration_parity.py`
 
 ## ⏳ Próximos pasos
-1. Aprobación del dueño de B-T1.
-2. En paralelo: B-T2 (auth JWT) y F-T1 (scaffold Next.js).
-3. Cambio de rama default en GitHub Settings (acción manual del dueño, pendiente).
-
-## 📐 Auditoría 2026-08-13 — segunda ronda (inspección profunda)
-Correcciones aplicadas y verificadas:
-- **Paridad modelos ↔ migración**: `rol`, `estado`, `stock_actual`, `orden`, `total` pasaron a `server_default` (antes el `create_all` divergía de Alembic). Nuevo verificador permanente: `backend/scripts/verify_migration_parity.py` → espejo exacto (6 tablas, 33 columnas).
-- **ERD**: tipos Mermaid válidos (se eliminaron `decimal(12,2)` y la fila `uk` sin tipo).
-- **Schemas faltantes** referenciados por el contrato: `HealthResponse`, `ProductosAdminResponse`, `ConfiguracionesResponse` (Pydantic + TS).
-- **Tipos de eventos WS**: nuevo `frontend/src/types/ws.ts` con los 4 eventos; el `verify_contract.py` ahora los exige.
-- **.gitignore**: `.env.*` (excepto `.env.example`), `*.db`, `uploads/`.
-- **bcrypt**: `LoginRequest.password` limitado a 72 bytes.
-- **TypeScript**: `tsc --noEmit --strict` sobre todos los types → 0 errores.
-- **PostgreSQL 17 real instalado en el sandbox** (BD `limpieza`): migración + seed + constraint de stock negativo verificados contra el motor de producción; el API server corre contra PostgreSQL real.
+1. Aprobación del dueño del frontend (F-T2/F-T3/F-T4 en preview).
+2. QA-T2 (Vitest) + QA-T3 (Playwright E2E).
+3. FASE FINAL: cuentas de deploy + CI/CD + manual del admin.
+4. Cambio de rama default en GitHub Settings (manual del dueño).
