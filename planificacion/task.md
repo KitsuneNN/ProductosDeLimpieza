@@ -2,7 +2,7 @@
 
 **Proyecto:** Sistema Web de Catálogo e Inventario — Local de Limpieza
 **Repo:** github.com/KitsuneNN/ProductosDeLimpieza
-**Última actualización:** 2026-08-13 · **Fase actual:** PLANIFICACIÓN
+**Última actualización:** 2026-08-13 · **Fase actual:** 🔴 FASE CRÍTICA
 
 **Estados:** ⬜ PENDIENTE · 🟦 EN_PROGRESO · 🟩 ESPERANDO_APROBACIÓN · ✅ APPROVED ·
 ⚠️ APPROVED_WITH_NOTES · 🔄 MINOR_CHANGES · ❌ REJECTED · 🔒 BLOQUEADO
@@ -12,11 +12,11 @@
 ## 🔴 FASE CRÍTICA (infraestructura base)
 | ID | Tarea | Agente | Estado | Evidencia |
 |----|-------|--------|--------|-----------|
-| ARQ-T1 | Modelo de datos + migración + seed + ERD | 📐 | ⬜ | — |
+| ARQ-T1 | Modelo de datos + migración + seed + ERD | 📐 | 🟩 | walkthroughs/arquitecto.md + verificación DDL exit 0 |
 | ARQ-T2 | Contrato API + eventos WS + types TS | 📐 | ⬜ | — |
 | B-T1 | Scaffold backend + conexión DB + healthcheck | 🔧 | ⬜ | — |
 | B-T2 | Auth JWT + roles + seed admin | 🔧 | ⬜ | — |
-| F-T1 | Scaffold frontend + rutas + tema + api client | 🎨 | ⬜ | — |
+| F-T1 | Scaffold frontend Next.js + rutas + tema + api client | 🎨 | ⬜ | — |
 
 ## 🟡 FASE ALTA (funcionalidad core)
 | ID | Tarea | Agente | Estado | Evidencia |
