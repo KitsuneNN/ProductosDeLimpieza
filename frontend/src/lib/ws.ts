@@ -30,11 +30,11 @@ export function useTiempoReal(onEvento: (evento: WsEvento) => void): EstadoWs {
       if (cerrado) return;
       setEstado(reintentos === 0 ? "conectando" : "reintentando");
       const protocolo = window.location.protocol === "https:" ? "wss" : "ws";
-      const candidatos = [
-        `${protocolo}://${window.location.host}/ws?token=${token}`,
-        `${process.env.NEXT_PUBLIC_WS_URL ?? "ws://localhost:8000"}/ws?token=${token}`,
-      ];
-      const url = candidatos[Math.min(reintentos, candidatos.length - 1)];
+      // Ruta relativa: el rewrite de Next la lleva al backend en dev Y en preview.
+      // NEXT_PUBLIC_WS_URL permite apuntar a un host explícito en despliegues.
+      const url =
+        process.env.NEXT_PUBLIC_WS_URL ??
+        `${protocolo}://${window.location.host}/ws?token=${token}`;
       try {
         ws = new WebSocket(url);
       } catch {

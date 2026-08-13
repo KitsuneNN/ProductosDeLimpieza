@@ -40,6 +40,10 @@
 3. Broadcast WS con `Decimal` sin serializar → serializador central en el manager.
 4. Endpoint WS bajo `/api/ws` en vez de `/ws` (contrato) → movido.
 5. ERD Mermaid inválido · schemas faltantes del contrato · `.gitignore` débil · paridad modelos/migración.
+6. **Página en blanco en el preview**: Next.js 16 bloqueaba los chunks JS y el HMR (403) cuando el `Origin` es el host del preview (`*.e2b.app`) → `allowedDevOrigins` en `next.config.ts` + restart. Verificado: chunks 403→200, HMR con handshake OK, WS vía proxy OK.
+7. `viewport.maximumScale=1` (bloqueaba zoom → violación a11y) → eliminado.
+8. Fallback WS a `ws://localhost:8000` (muerto en el navegador del usuario) → ruta relativa `/ws` única + `NEXT_PUBLIC_WS_URL` opcional.
+9. Next 16 ya no corre `tsc` en `next build` → script `npm run typecheck` agregado (0 errores).
 
 ## 📂 Convenciones del repo
 - Rama default: `main` (⚠️ pendiente cambio en GitHub Settings — la default sigue siendo la rama de test)
