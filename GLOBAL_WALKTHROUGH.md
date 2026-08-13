@@ -17,7 +17,8 @@
 | 2026-08-13 | F-T1..F-T4: Next.js 16 completo (cliente + admin + QR) | ✅ |
 | 2026-08-13 | QA-T1: pytest 28 tests, services 95% | ✅ |
 | 2026-08-13 | Fix preview en blanco (allowedDevOrigins) | ✅ |
-| 2026-08-13 | Fix catálogo inaccesible: entorno reconstruido (sandbox se reinicia entre turnos) + admin puede ver catálogo | ✅ |
+| 2026-08-13 | Fix catálogo inaccesible: entorno reconstruido + admin puede ver catálogo | ✅ |
+| 2026-08-13 | **MERGE a main**: primera entrega completa en la rama principal | ✅ |
 
 ## 🧪 Cómo probar el sistema ahora (preview Arena)
 1. Abrir el preview **Frontend** (puerto 3000).
