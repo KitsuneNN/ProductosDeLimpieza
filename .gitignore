@@ -1,0 +1,29 @@
+# Dependencias y entornos
+node_modules/
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Builds
+.next/
+out/
+dist/
+build/
+
+# Env y secretos (NUNCA commitear credenciales)
+.env
+.env.local
+.env.*.local
+
+# Herramientas
+.pnpm-store/
+coverage/
+playwright-report/
+test-results/
+
+# IDE / SO
+.DS_Store
+.idea/
+.vscode/
