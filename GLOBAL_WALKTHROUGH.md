@@ -14,7 +14,8 @@
 | 2026-08-13 | Equipo de 5 agentes aprobado por el dueño | ✅ OK |
 | 2026-08-13 | ADR-001 ACEPTADO: Next.js 15 (UI) + FastAPI (API) + PostgreSQL + Cloudinary | ✅ OK |
 | 2026-08-13 | Deploy: sin cuentas aún → desarrollo local, preparar en FASE FINAL | ✅ OK |
-| 2026-08-13 | ARQ-T1: modelo de datos + migración + seed + ERD | 🟩 ESPERANDO_APROBACIÓN |
+| 2026-08-13 | ARQ-T1: modelo de datos, migración, seed y ERD | ✅ APPROVED (auditoría: migración DDL congelado + test up/down real) |
+| 2026-08-13 | ARQ-T2: schemas Pydantic + types TS + contrato API/WS | 🟩 ESPERANDO_APROBACIÓN |
 
 ## 🧾 Decisiones clave
 - **ADR-001 (ACEPTADO):** Next.js 15 App Router como capa UI (mobile-first) + FastAPI como API y WebSockets + PostgreSQL + Cloudinary (cuenta existente).
@@ -29,7 +30,14 @@
 - Idioma de UI, comentarios y docs: español
 
 ## ⏳ Próximos pasos
-1. Aprobación Chef de ARQ-T1 (modelo de datos).
-2. ARQ-T2 (contrato API + WS + types TS).
-3. B-T1, B-T2, F-T1 (scaffolds).
-4. Cambio de rama default en GitHub Settings (acción manual del dueño, pendiente).
+1. Aprobación Chef de ARQ-T2 (contrato API/WS + types TS).
+2. En paralelo: B-T1 (scaffold backend), B-T2 (auth), F-T1 (scaffold Next.js).
+3. Cambio de rama default en GitHub Settings (acción manual del dueño, pendiente).
+
+## 📐 Auditoría 2026-08-13 (correcciones aplicadas)
+- Migración 0001 convertida a DDL congelado autocontenido (independiente del código).
+- Maquinaria Alembic completa: `alembic.ini`, `env.py` (DATABASE_URL), `script.py.mako`.
+- Seed dialect-agnóstico idempotente con órdenes 1..6.
+- Verificación REAL de migración: upgrade → downgrade → upgrade + seed ×2 (exit 0).
+- `verify_contract.py` (Regla 5) agregado como verificación permanente del contrato.
+- Versiones corregidas en ADR: Next.js 16 (npm: 16.3.0), Python 3.13.

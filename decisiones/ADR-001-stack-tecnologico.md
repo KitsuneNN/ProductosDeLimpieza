@@ -14,9 +14,9 @@ en lugar de Vite**, manteniendo FastAPI como API.
 ## Decisión
 | Capa | Tecnología | Justificación |
 |------|-----------|---------------|
-| Frontend (UI) | **Next.js 15 (App Router)** + TypeScript + Tailwind CSS | Elegido por el dueño. Capa de interfaz mobile-first, componentes cliente (CSR tras login) |
+| Frontend (UI) | **Next.js 16 (App Router)** + TypeScript + Tailwind CSS | Elegido por el dueño (en reemplazo de Vite). Capa de interfaz mobile-first, componentes cliente (CSR tras login). Verificado: v16.3.0 en npm |
 | UI kit | Componentes estilo shadcn/ui adaptados (botones ≥44px, alto contraste) | Usabilidad táctil y con guantes (requisito 9.8) |
-| Backend (API) | **FastAPI (Python 3.12)** + Uvicorn | Alta velocidad, WebSockets nativos para tiempo real (aviso sonoro, sincronización de stock) |
+| Backend (API) | **FastAPI (Python 3.13)** + Uvicorn | Alta velocidad, WebSockets nativos para tiempo real (aviso sonoro, sincronización de stock) |
 | Comunicación | REST (JSON) + **WebSocket** (`solicitud.creada`, `solicitud.pagada`, `stock.actualizado`) + fallback polling | Cliente Next.js consume la API de FastAPI directamente; proxy `/api` en dev via rewrites |
 | DB | PostgreSQL + SQLAlchemy 2.x (async) + Alembic | Transacciones ACID seguras para inventario |
 | Hosting DB | Neon o Railway (a definir en FASE FINAL; desarrollo local primero) | Postgres administrado; aún sin cuentas creadas |

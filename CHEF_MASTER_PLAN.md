@@ -11,7 +11,7 @@ de disponibilidad ("Disponible", "Pocas unidades", "Sin stock") calculadas contr
 **umbral configurable por el admin**.
 
 ## STACK TECNOLÓGICO (ACEPTADO — ver decisiones/ADR-001)
-- **Frontend (UI):** Next.js 15 (App Router) + TypeScript + Tailwind CSS — mobile-first absoluto, componentes cliente
+- **Frontend (UI):** Next.js 16 (App Router) + TypeScript + Tailwind CSS — mobile-first absoluto, componentes cliente
 - **Backend (API):** FastAPI (Python) + Uvicorn — API REST + WebSockets nativos
 - **Comunicación:** REST JSON + WS (`solicitud.creada`, `solicitud.pagada`, `stock.actualizado`) + fallback polling; proxy `/api` en dev
 - **Base de datos:** PostgreSQL (Neon/Railway en FASE FINAL) + SQLAlchemy 2.x + Alembic (migraciones)
@@ -80,7 +80,7 @@ ProductosDeLimpieza/
 ### 🔴 FASE CRÍTICA (infraestructura base)
 
 #### 📐 ARQ-T1 — Modelo de datos, migración y estados
-- **Archivos:** `backend/app/models/*.py`, `backend/alembic/versions/0001_*.py`, `backend/app/db/seed.py`, `docs/ERD.md`
+- **Archivos:** `backend/app/models/*.py`, `backend/alembic/**` (versions/0001, alembic.ini, env.py, script.py.mako), `backend/app/db/seed.py`, `docs/ERD.md`
 - **Duración estimada:** 1 día · **Dependencias:** ninguna
 - **Instrucciones:**
   1. Tablas: `usuarios` (id, nombre, telefono, email, password_hash, rol, creado_en), `categorias` (id, nombre, orden), `productos` (id, categoria_id, nombre, descripcion, precio, stock_actual, imagen_url, estado activo|pausado), `solicitudes` (id, usuario_id, estado, total, creado_en, pagada_en), `detalle_solicitud` (id, solicitud_id, producto_id, cantidad, precio_unitario), `configuracion` (clave PK, valor)

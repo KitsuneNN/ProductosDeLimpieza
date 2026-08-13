@@ -1,17 +1,18 @@
-# CLAIMS ACTIVOS — Protocolo de Concurrencia (Regla 9)
+# claims — Protocolo de Concurrencia (Regla 9)
 
-# Formato:
-#   <ruta_archivo>:
-#     agente: <agente>
-#     tarea: <id_tarea>
-#     desde: <ISO8601>
-#     nivel: <ALTO_RIESGO|NORMAL>
-#
-# Reglas:
-# - Un archivo solo puede tener UN claim activo.
-# - Archivos de ALTO RIESGO (config global, types compartidos, layouts, entrada principal)
-#   requieren aprobación del Chef ANTES de declarar el claim.
-# - El agente LIBERA el claim al completar (o el Chef lo libera al aprobar).
+# Archivos de ALTO RIESGO (requieren aprobación Chef ANTES de claim):
+#   - Configuración global (next.config, alembic.ini, vite/ts configs)
+#   - backend/app/schemas/** y frontend/src/types/** (types compartidos)
+#   - Layouts/componentes compartidos del frontend
+#   - Archivos de entrada principal (main.py, app/)
 
 claims: {}
+
+historial:
+  - archivos: "backend/app/models/**, backend/app/schemas/**, frontend/src/types/**, docs/**, backend/alembic/**, backend/scripts/"
+    agente: "arq"
+    tarea: "ARQ-T1 + ARQ-T2"
+    nivel: "ALTO_RIESGO (aprobado por Chef)"
+    estado: "LIBERADO"
+
 ultima_actualizacion: "2026-08-13T00:00:00Z"

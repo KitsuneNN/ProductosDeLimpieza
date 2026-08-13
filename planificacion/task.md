@@ -12,8 +12,8 @@
 ## 🔴 FASE CRÍTICA (infraestructura base)
 | ID | Tarea | Agente | Estado | Evidencia |
 |----|-------|--------|--------|-----------|
-| ARQ-T1 | Modelo de datos + migración + seed + ERD | 📐 | 🟩 | walkthroughs/arquitecto.md + verificación DDL exit 0 |
-| ARQ-T2 | Contrato API + eventos WS + types TS | 📐 | ⬜ | — |
+| ARQ-T1 | Modelo de datos + migración + seed + ERD | 📐 | ✅ | migración REAL up/down + seed ×2 (SQLite) exit 0 |
+| ARQ-T2 | Contrato API + eventos WS + types TS | 📐 | 🟩 | verify_contract.py: 27 pares espejo OK |
 | B-T1 | Scaffold backend + conexión DB + healthcheck | 🔧 | ⬜ | — |
 | B-T2 | Auth JWT + roles + seed admin | 🔧 | ⬜ | — |
 | F-T1 | Scaffold frontend Next.js + rutas + tema + api client | 🎨 | ⬜ | — |
