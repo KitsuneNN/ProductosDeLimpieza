@@ -11,3 +11,7 @@ export interface ConfiguracionUpdate {
 export interface UmbralResponse {
   umbral_pocas_unidades: number;
 }
+
+export interface ConfiguracionesResponse {
+  items: ConfiguracionPublic[];
+}

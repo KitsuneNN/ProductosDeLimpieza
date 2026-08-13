@@ -8,3 +8,4 @@ export * from "./producto";
 export * from "./solicitud";
 export * from "./configuracion";
 export * from "./catalogo";
+export * from "./ws";

@@ -21,7 +21,7 @@
 
 | Método | Ruta | Auth | Descripción | 200 → | Errores |
 |--------|------|------|-------------|-------|---------|
-| GET | `/api/health` | — | Healthcheck (B-T1) | `{"status":"ok"}` | — |
+| GET | `/api/health` | — | Healthcheck con ping a la BD | `HealthResponse` `{"status":"ok"}` | 503 si la BD no responde |
 | POST | `/api/auth/registro` | — | Registro de cliente | `TokenResponse` | 400 datos inválidos · 409 email ya registrado |
 | POST | `/api/auth/login` | — | Login | `TokenResponse` | 401 credenciales inválidas |
 
@@ -35,7 +35,7 @@
 |--------|------|-------------|-------|
 | GET | `/api/categorias` | Categorías ordenadas | `CategoriasResponse` |
 | GET | `/api/catalogo` | Catálogo paginado. Filtros: `?categoria_id=&busqueda=&page=&page_size=` | `CatalogoResponse` |
-| GET | `/api/catalogo/{producto_id}` | Detalle de producto | `ProductoClientePublic` |
+| GET | `/api/catalogo/{producto_id}` | Detalle de producto (404 si no existe o está `pausado`) | `ProductoClientePublic` |
 | POST | `/api/solicitudes` | Crear solicitud | `SolicitudPublic` (estado `pendiente`) |
 | GET | `/api/solicitudes/mias` | Mis solicitudes (`?page=&page_size=`) | `SolicitudesResponse` |
 | GET | `/api/solicitudes/{id}` | Detalle (solo si es propia) | `SolicitudPublic` |
@@ -51,7 +51,7 @@ Si el JSON de un endpoint de cliente incluye stock numérico → BUG crítico.
 
 | Método | Ruta | Descripción | 200 → |
 |--------|------|-------------|-------|
-| GET | `/api/admin/productos` | Todos (incluye pausados y stock). `?categoria_id=&busqueda=&page=&page_size=` | `{items: [ProductoAdminPublic], page, page_size, total}` |
+| GET | `/api/admin/productos` | Todos (incluye pausados y stock). `?categoria_id=&busqueda=&page=&page_size=` | `ProductosAdminResponse` |
 | POST | `/api/admin/productos` | Crear producto | `ProductoAdminPublic` |
 | GET | `/api/admin/productos/{id}` | Detalle | `ProductoAdminPublic` |
 | PUT | `/api/admin/productos/{id}` | Edición parcial (campos presentes) | `ProductoAdminPublic` |
@@ -62,7 +62,7 @@ Si el JSON de un endpoint de cliente incluye stock numérico → BUG crítico.
 | GET | `/api/admin/solicitudes/{id}` | Detalle con usuario | `SolicitudAdminPublic` |
 | POST | `/api/admin/solicitudes/{id}/pagar` | **Pago: descuenta stock transaccionalmente** | `PagoResponse` |
 | POST | `/api/admin/solicitudes/{id}/cancelar` | Cancelar cualquier solicitud pendiente | `SolicitudAdminPublic` |
-| GET | `/api/admin/config` | Toda la configuración | `{items: [ConfiguracionPublic]}` |
+| GET | `/api/admin/config` | Toda la configuración | `ConfiguracionesResponse` |
 | GET | `/api/admin/config/umbral-pocas-unidades` | Umbral actual | `UmbralResponse` |
 | PUT | `/api/admin/config/umbral-pocas-unidades` | Cambiar umbral `{valor: "3"}` | `UmbralResponse` |
 

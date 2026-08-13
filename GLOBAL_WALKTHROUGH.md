@@ -14,8 +14,9 @@
 | 2026-08-13 | Equipo de 5 agentes aprobado por el dueño | ✅ OK |
 | 2026-08-13 | ADR-001 ACEPTADO: Next.js 15 (UI) + FastAPI (API) + PostgreSQL + Cloudinary | ✅ OK |
 | 2026-08-13 | Deploy: sin cuentas aún → desarrollo local, preparar en FASE FINAL | ✅ OK |
-| 2026-08-13 | ARQ-T1: modelo de datos, migración, seed y ERD | ✅ APPROVED (auditoría: migración DDL congelado + test up/down real) |
-| 2026-08-13 | ARQ-T2: schemas Pydantic + types TS + contrato API/WS | 🟩 ESPERANDO_APROBACIÓN |
+| 2026-08-13 | ARQ-T1: modelo de datos, migración, seed y ERD | ✅ APPROVED (auditoría: DDL congelado + paridad verificada) |
+| 2026-08-13 | ARQ-T2: schemas Pydantic + types TS + contrato API/WS | ✅ APPROVED (30 pares espejo + 4 eventos WS + tsc strict OK) |
+| 2026-08-13 | B-T1: scaffold FastAPI + PostgreSQL + healthcheck | 🟩 ESPERANDO_APROBACIÓN (servidor vivo, /api/health 200) |
 
 ## 🧾 Decisiones clave
 - **ADR-001 (ACEPTADO):** Next.js 15 App Router como capa UI (mobile-first) + FastAPI como API y WebSockets + PostgreSQL + Cloudinary (cuenta existente).
@@ -30,14 +31,17 @@
 - Idioma de UI, comentarios y docs: español
 
 ## ⏳ Próximos pasos
-1. Aprobación Chef de ARQ-T2 (contrato API/WS + types TS).
-2. En paralelo: B-T1 (scaffold backend), B-T2 (auth), F-T1 (scaffold Next.js).
+1. Aprobación del dueño de B-T1.
+2. En paralelo: B-T2 (auth JWT) y F-T1 (scaffold Next.js).
 3. Cambio de rama default en GitHub Settings (acción manual del dueño, pendiente).
 
-## 📐 Auditoría 2026-08-13 (correcciones aplicadas)
-- Migración 0001 convertida a DDL congelado autocontenido (independiente del código).
-- Maquinaria Alembic completa: `alembic.ini`, `env.py` (DATABASE_URL), `script.py.mako`.
-- Seed dialect-agnóstico idempotente con órdenes 1..6.
-- Verificación REAL de migración: upgrade → downgrade → upgrade + seed ×2 (exit 0).
-- `verify_contract.py` (Regla 5) agregado como verificación permanente del contrato.
-- Versiones corregidas en ADR: Next.js 16 (npm: 16.3.0), Python 3.13.
+## 📐 Auditoría 2026-08-13 — segunda ronda (inspección profunda)
+Correcciones aplicadas y verificadas:
+- **Paridad modelos ↔ migración**: `rol`, `estado`, `stock_actual`, `orden`, `total` pasaron a `server_default` (antes el `create_all` divergía de Alembic). Nuevo verificador permanente: `backend/scripts/verify_migration_parity.py` → espejo exacto (6 tablas, 33 columnas).
+- **ERD**: tipos Mermaid válidos (se eliminaron `decimal(12,2)` y la fila `uk` sin tipo).
+- **Schemas faltantes** referenciados por el contrato: `HealthResponse`, `ProductosAdminResponse`, `ConfiguracionesResponse` (Pydantic + TS).
+- **Tipos de eventos WS**: nuevo `frontend/src/types/ws.ts` con los 4 eventos; el `verify_contract.py` ahora los exige.
+- **.gitignore**: `.env.*` (excepto `.env.example`), `*.db`, `uploads/`.
+- **bcrypt**: `LoginRequest.password` limitado a 72 bytes.
+- **TypeScript**: `tsc --noEmit --strict` sobre todos los types → 0 errores.
+- **PostgreSQL 17 real instalado en el sandbox** (BD `limpieza`): migración + seed + constraint de stock negativo verificados contra el motor de producción; el API server corre contra PostgreSQL real.

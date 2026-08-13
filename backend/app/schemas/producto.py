@@ -72,3 +72,12 @@ class ProductoClientePublic(_MontoJson):
     precio: Decimal
     imagen_url: str | None
     disponibilidad: DISPONIBILIDAD
+
+
+class ProductosAdminResponse(SchemaBase):
+    """Listado paginado de productos (vista admin)."""
+
+    items: list[ProductoAdminPublic]
+    page: int
+    page_size: int
+    total: int

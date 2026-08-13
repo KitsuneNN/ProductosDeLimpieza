@@ -11,7 +11,12 @@ claims: {}
 historial:
   - archivos: "backend/app/models/**, backend/app/schemas/**, frontend/src/types/**, docs/**, backend/alembic/**, backend/scripts/"
     agente: "arq"
-    tarea: "ARQ-T1 + ARQ-T2"
+    tarea: "ARQ-T1 + ARQ-T2 (+ auditorías)"
+    nivel: "ALTO_RIESGO (aprobado por Chef)"
+    estado: "LIBERADO"
+  - archivos: "backend/app/main.py, backend/app/core/**, backend/app/db/session.py, backend/app/api/health.py, backend/app/api/router.py, backend/requirements.txt, backend/.env.example"
+    agente: "bk"
+    tarea: "B-T1"
     nivel: "ALTO_RIESGO (aprobado por Chef)"
     estado: "LIBERADO"
 

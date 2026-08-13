@@ -52,3 +52,10 @@ export interface ProductoClientePublic {
   imagen_url: string | null;
   disponibilidad: Disponibilidad;
 }
+
+export interface ProductosAdminResponse {
+  items: ProductoAdminPublic[];
+  page: number;
+  page_size: number;
+  total: number;
+}

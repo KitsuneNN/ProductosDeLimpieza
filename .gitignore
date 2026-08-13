@@ -14,8 +14,13 @@ build/
 
 # Env y secretos (NUNCA commitear credenciales)
 .env
-.env.local
-.env.*.local
+.env.*
+!.env.example
+
+# Bases de datos locales y uploads
+*.db
+*.db-journal
+uploads/
 
 # Herramientas
 .pnpm-store/

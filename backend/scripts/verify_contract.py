@@ -26,6 +26,7 @@ TYPES_DIR = RAIZ.parent / "frontend" / "src" / "types"
 
 PARES = {
     # schema Pydantic → interfaz TS
+    "HealthResponse": "HealthResponse",
     "RegistroRequest": "RegistroRequest",
     "LoginRequest": "LoginRequest",
     "UsuarioPublic": "UsuarioPublic",
@@ -38,6 +39,7 @@ PARES = {
     "ProductoUpdate": "ProductoUpdate",
     "ProductoEstadoUpdate": "ProductoEstadoUpdate",
     "ProductoClientePublic": "ProductoClientePublic",
+    "ProductosAdminResponse": "ProductosAdminResponse",
     "ItemSolicitudCreate": "ItemSolicitudCreate",
     "SolicitudCreate": "SolicitudCreate",
     "DetalleSolicitudPublic": "DetalleSolicitudPublic",
@@ -51,6 +53,7 @@ PARES = {
     "ConfiguracionPublic": "ConfiguracionPublic",
     "ConfiguracionUpdate": "ConfiguracionUpdate",
     "UmbralResponse": "UmbralResponse",
+    "ConfiguracionesResponse": "ConfiguracionesResponse",
     "CategoriasResponse": "CategoriasResponse",
     "CatalogoResponse": "CatalogoResponse",
 }
@@ -111,6 +114,7 @@ def main() -> int:
         CategoriaCreate,
         CategoriaPublic,
         CategoriaUpdate,
+        ConfiguracionesResponse,
         ConfiguracionPublic,
         ConfiguracionUpdate,
         DetalleSolicitudPublic,
@@ -119,6 +123,7 @@ def main() -> int:
         ESTADO_SOLICITUD,
         FaltanteInfo,
         FaltantesResponse,
+        HealthResponse,
         ItemSolicitudCreate,
         LoginRequest,
         PagoResponse,
@@ -126,6 +131,7 @@ def main() -> int:
         ProductoClientePublic,
         ProductoCreate,
         ProductoEstadoUpdate,
+        ProductosAdminResponse,
         ProductoUpdate,
         RegistroRequest,
         ROL_USUARIO,
@@ -139,6 +145,7 @@ def main() -> int:
         UsuarioPublic,
     )
     esquemas = {
+        "HealthResponse": HealthResponse,
         "RegistroRequest": RegistroRequest,
         "LoginRequest": LoginRequest,
         "UsuarioPublic": UsuarioPublic,
@@ -151,6 +158,7 @@ def main() -> int:
         "ProductoUpdate": ProductoUpdate,
         "ProductoEstadoUpdate": ProductoEstadoUpdate,
         "ProductoClientePublic": ProductoClientePublic,
+        "ProductosAdminResponse": ProductosAdminResponse,
         "ItemSolicitudCreate": ItemSolicitudCreate,
         "SolicitudCreate": SolicitudCreate,
         "DetalleSolicitudPublic": DetalleSolicitudPublic,
@@ -164,6 +172,7 @@ def main() -> int:
         "ConfiguracionPublic": ConfiguracionPublic,
         "ConfiguracionUpdate": ConfiguracionUpdate,
         "UmbralResponse": UmbralResponse,
+        "ConfiguracionesResponse": ConfiguracionesResponse,
         "CategoriasResponse": CategoriasResponse,
         "CatalogoResponse": CatalogoResponse,
     }
@@ -235,8 +244,26 @@ def main() -> int:
             print("  -", e)
         return 1
 
+    # 4) tipos de eventos WS (ws.ts debe declarar los 4 eventos del contrato)
+    ws_path = TYPES_DIR / "ws.ts"
+    if not ws_path.exists():
+        print("❌ Falta frontend/src/types/ws.ts (tipos de eventos WebSocket)")
+        return 1
+    ws_texto = ws_path.read_text(encoding="utf-8")
+    eventos_requeridos = [
+        "solicitud.creada",
+        "solicitud.pagada",
+        "solicitud.cancelada",
+        "stock.actualizado",
+    ]
+    faltan = [e for e in eventos_requeridos if e not in ws_texto]
+    if faltan:
+        print("❌ ws.ts no declara los eventos:", faltan)
+        return 1
+
     print(f"✅ Regla 5 verificada: {len(PARES)} pares Pydantic↔TS idénticos")
     print(f"✅ Literales coincidentes: {len(ALIAS)} aliases TS ↔ Pydantic")
+    print(f"✅ Eventos WS tipados: {len(eventos_requeridos)} eventos en ws.ts")
     return 0
 
 

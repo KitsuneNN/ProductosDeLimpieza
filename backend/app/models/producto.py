@@ -47,9 +47,9 @@ class Producto(TimestampMixin, Base):
     nombre: Mapped[str] = mapped_column(String(120), index=True, nullable=False)
     descripcion: Mapped[str | None] = mapped_column(Text, nullable=True)
     precio: Mapped[Decimal] = mapped_column(Numeric(12, 2), nullable=False)
-    stock_actual: Mapped[int] = mapped_column(default=0, nullable=False)
+    stock_actual: Mapped[int] = mapped_column(server_default="0", nullable=False)
     imagen_url: Mapped[str | None] = mapped_column(String(500), nullable=True)
-    estado: Mapped[str] = mapped_column(String(20), default="activo", nullable=False)
+    estado: Mapped[str] = mapped_column(String(20), server_default="activo", nullable=False)
     actualizado_en: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         server_default=func.now(),

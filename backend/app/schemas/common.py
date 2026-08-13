@@ -15,3 +15,9 @@ class SchemaBase(BaseModel):
     """Base común: permite construir schemas desde ORM."""
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class HealthResponse(SchemaBase):
+    """Respuesta de GET /api/health."""
+
+    status: Literal["ok"]

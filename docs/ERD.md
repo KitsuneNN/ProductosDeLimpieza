@@ -3,6 +3,7 @@
 **Proyecto:** Sistema Web de Catálogo e Inventario — Local de Limpieza
 **Autor:** 📐 Arquitecto · **Estado:** ESPERANDO_APROBACIÓN_CHEF
 **Fuente de verdad:** `backend/app/models/*.py` + `backend/alembic/versions/0001_initial.py`
+**Verificación de paridad:** `cd backend && .venv/bin/python scripts/verify_migration_parity.py`
 
 ## Diagrama (Mermaid)
 
@@ -19,7 +20,7 @@ erDiagram
         string telefono
         string email UK
         string password_hash
-        string rol "cliente | admin"
+        string rol "cliente | admin (CHECK)"
         datetime creado_en
     }
     CATEGORIAS {
@@ -32,28 +33,27 @@ erDiagram
         int categoria_id FK
         string nombre
         text descripcion
-        decimal(12,2) precio ">= 0"
+        float precio "Numeric(12,2) >= 0 (CHECK)"
         int stock_actual ">= 0 (CHECK)"
         string imagen_url
-        string estado "activo | pausado"
+        string estado "activo | pausado (CHECK)"
         datetime creado_en
         datetime actualizado_en
     }
     SOLICITUDES {
         int id PK
         int usuario_id FK
-        string estado "pendiente | pagada | cancelada"
-        decimal(12,2) total ">= 0"
+        string estado "pendiente | pagada | cancelada (CHECK)"
+        float total "Numeric(12,2) >= 0 (CHECK)"
         datetime creado_en
         datetime pagada_en
     }
     DETALLE_SOLICITUD {
         int id PK
-        int solicitud_id FK "CASCADE"
-        int producto_id FK "RESTRICT"
-        int cantidad "> 0 (CHECK)"
-        decimal(12,2) precio_unitario ">= 0"
-        uk solicitud_id_producto_id
+        int solicitud_id FK "ON DELETE CASCADE"
+        int producto_id FK "ON DELETE RESTRICT"
+        int cantidad "> 0 (CHECK) · UK(solicitud_id, producto_id)"
+        float precio_unitario "Numeric(12,2) >= 0 (CHECK)"
     }
     CONFIGURACION {
         string clave PK
@@ -87,4 +87,4 @@ erDiagram
 ### Seed
 - Categorías base: Detergentes, Lavandinas, Desinfectantes, Esponjas y trapos, Aromatizantes, Otros.
 - `umbral_pocas_unidades = 5`.
-- Idempotente vía `ON CONFLICT DO NOTHING` (`backend/app/db/seed.py`).
+- Idempotente (`backend/app/db/seed.py`).

@@ -1,5 +1,20 @@
 # WALKTHROUGH — 📐 Arquitecto
 
+## [2026-08-13] - Auditoría segunda ronda (inspección profunda del Chef)
+### ✅ Implementado
+- Modelos con `server_default` (rol, estado, stock_actual, orden, total) → paridad exacta con la migración
+- `verify_migration_parity.py` (nuevo verificador permanente: migración == modelos, 6 tablas/33 columnas)
+- Schemas agregados: `HealthResponse`, `ProductosAdminResponse`, `ConfiguracionesResponse` (+ espejos TS)
+- `frontend/src/types/ws.ts` con los 4 eventos del contrato; `verify_contract.py` ahora los exige (30 pares)
+- ERD con tipos Mermaid válidos; `LoginRequest.password` max 72 (bcrypt); `.gitignore` reforzado
+
+### 🧪 Verificación
+- Ruta/comando: `cd backend && .venv/bin/python scripts/verify_contract.py && .venv/bin/python scripts/verify_migration_parity.py` + `tsc --noEmit --strict`
+- Resultado: 30 pares espejo · 4 literales · 4 eventos WS · paridad exacta · TS 0 errores → exit 0 ✅
+
+### ⏳ Estado
+✅ APPROVED (Chef)
+
 ## [2026-08-13] - Auditoría Chef + correcciones de ARQ-T1
 ### ✅ Implementado
 - Migración 0001 reescrita con DDL congelado y autocontenido (sin depender del código)

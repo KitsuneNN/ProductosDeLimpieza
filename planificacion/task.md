@@ -12,9 +12,9 @@
 ## 🔴 FASE CRÍTICA (infraestructura base)
 | ID | Tarea | Agente | Estado | Evidencia |
 |----|-------|--------|--------|-----------|
-| ARQ-T1 | Modelo de datos + migración + seed + ERD | 📐 | ✅ | migración REAL up/down + seed ×2 (SQLite) exit 0 |
-| ARQ-T2 | Contrato API + eventos WS + types TS | 📐 | 🟩 | verify_contract.py: 27 pares espejo OK |
-| B-T1 | Scaffold backend + conexión DB + healthcheck | 🔧 | ⬜ | — |
+| ARQ-T1 | Modelo de datos + migración + seed + ERD | 📐 | ✅ | migración REAL up/down + seed ×2 exit 0 + paridad modelos↔migración |
+| ARQ-T2 | Contrato API + eventos WS + types TS | 📐 | ✅ | verify_contract.py: 30 pares espejo + 4 eventos WS |
+| B-T1 | Scaffold backend + conexión DB + healthcheck | 🔧 | 🟩 | PostgreSQL 17 real: migración+seed OK, /api/health 200, servidor vivo |
 | B-T2 | Auth JWT + roles + seed admin | 🔧 | ⬜ | — |
 | F-T1 | Scaffold frontend Next.js + rutas + tema + api client | 🎨 | ⬜ | — |
 

@@ -22,8 +22,14 @@ target_metadata = Base.metadata
 
 def _database_url() -> str:
     url = os.environ.get("DATABASE_URL") or config.get_main_option("sqlalchemy.url")
-    if url:
-        url = url.replace("postgres://", "postgresql://")
+    if not url:
+        raise RuntimeError(
+            "Falta DATABASE_URL (variable de entorno) o sqlalchemy.url (alembic.ini)"
+        )
+    # Las migraciones corren con driver SYNC: convertir URLs async del app
+    url = url.replace("postgres://", "postgresql://")
+    url = url.replace("sqlite+aiosqlite", "sqlite")
+    url = url.replace("postgresql+asyncpg", "postgresql+psycopg")
     return url
 
 

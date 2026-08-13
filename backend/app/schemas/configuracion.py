@@ -18,3 +18,9 @@ class UmbralResponse(SchemaBase):
     """Respuesta cómoda de GET /api/admin/config/umbral-pocas-unidades."""
 
     umbral_pocas_unidades: int = Field(ge=1)
+
+
+class ConfiguracionesResponse(SchemaBase):
+    """Listado de toda la configuración (vista admin)."""
+
+    items: list[ConfiguracionPublic]

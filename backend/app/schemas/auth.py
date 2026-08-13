@@ -17,7 +17,7 @@ class RegistroRequest(SchemaBase):
 
 class LoginRequest(SchemaBase):
     email: EmailStr
-    password: str
+    password: str = Field(max_length=72)
 
 
 class UsuarioPublic(SchemaBase):

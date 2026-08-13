@@ -38,10 +38,10 @@ class Solicitud(TimestampMixin, Base):
         nullable=False,
     )
     estado: Mapped[str] = mapped_column(
-        String(20), default="pendiente", nullable=False
+        String(20), server_default="pendiente", nullable=False
     )
     total: Mapped[Decimal] = mapped_column(
-        Numeric(12, 2), default=0, nullable=False
+        Numeric(12, 2), server_default="0", nullable=False
     )
     pagada_en: Mapped[datetime | None] = mapped_column(
         DateTime(timezone=True), nullable=True

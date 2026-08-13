@@ -7,15 +7,22 @@ from .common import (
     DISPONIBILIDAD,
     ESTADO_PRODUCTO,
     ESTADO_SOLICITUD,
+    HealthResponse,
     ROL_USUARIO,
     SchemaBase,
 )
-from .configuracion import ConfiguracionPublic, ConfiguracionUpdate, UmbralResponse
+from .configuracion import (
+    ConfiguracionesResponse,
+    ConfiguracionPublic,
+    ConfiguracionUpdate,
+    UmbralResponse,
+)
 from .producto import (
     ProductoAdminPublic,
     ProductoClientePublic,
     ProductoCreate,
     ProductoEstadoUpdate,
+    ProductosAdminResponse,
     ProductoUpdate,
 )
 from .solicitud import (
@@ -35,6 +42,7 @@ __all__ = [
     "DISPONIBILIDAD",
     "ESTADO_PRODUCTO",
     "ESTADO_SOLICITUD",
+    "HealthResponse",
     "ROL_USUARIO",
     "SchemaBase",
     "LoginRequest",
@@ -48,11 +56,13 @@ __all__ = [
     "CategoriaUpdate",
     "ConfiguracionPublic",
     "ConfiguracionUpdate",
+    "ConfiguracionesResponse",
     "UmbralResponse",
     "ProductoAdminPublic",
     "ProductoClientePublic",
     "ProductoCreate",
     "ProductoEstadoUpdate",
+    "ProductosAdminResponse",
     "ProductoUpdate",
     "DetalleSolicitudPublic",
     "FaltanteInfo",

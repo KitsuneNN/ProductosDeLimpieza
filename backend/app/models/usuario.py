@@ -24,6 +24,6 @@ class Usuario(TimestampMixin, Base):
     telefono: Mapped[str] = mapped_column(String(30), nullable=False)
     email: Mapped[str] = mapped_column(String(255), unique=True, nullable=False)
     password_hash: Mapped[str] = mapped_column(String(255), nullable=False)
-    rol: Mapped[str] = mapped_column(String(20), default="cliente", nullable=False)
+    rol: Mapped[str] = mapped_column(String(20), server_default="cliente", nullable=False)
 
     solicitudes: Mapped[list["Solicitud"]] = relationship(back_populates="usuario")
