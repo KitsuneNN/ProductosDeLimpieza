@@ -7,12 +7,16 @@ Desarrollo:
 
 Documentación interactiva: http://localhost:8000/docs
 """
+from pathlib import Path
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.staticfiles import StaticFiles
 
 from app.api.router import api_router
 from app.core.config import settings
+from app.services.checkout import StockInsuficienteError
 
 app = FastAPI(
     title="ProductosDeLimpieza API",
@@ -32,6 +36,28 @@ app.add_middleware(
 )
 
 app.include_router(api_router, prefix="/api")
+
+# WebSocket en /ws (fuera del prefijo /api, según docs/WS_EVENTS.md)
+from app.ws import route as ws_route  # noqa: E402
+
+app.include_router(ws_route.router)
+
+# Imágenes locales (fallback sin Cloudinary): /uploads/<archivo>
+DIR_UPLOADS = Path("uploads")
+DIR_UPLOADS.mkdir(parents=True, exist_ok=True)
+app.mount("/uploads", StaticFiles(directory=DIR_UPLOADS), name="uploads")
+
+
+@app.exception_handler(StockInsuficienteError)
+async def _stock_insuficiente_handler(request, exc: StockInsuficienteError) -> JSONResponse:
+    """409 con la lista de faltantes (sin descuentos parciales)."""
+    return JSONResponse(
+        status_code=409,
+        content={
+            "detail": str(exc),
+            "faltantes": [f.model_dump(mode="json") for f in exc.faltantes],
+        },
+    )
 
 _PAGINA_ESTADO = """
 <!doctype html>

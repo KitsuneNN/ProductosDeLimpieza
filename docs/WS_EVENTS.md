@@ -18,6 +18,7 @@ Todos los mensajes tienen la forma `{"evento": "...", "datos": {...}}`.
 
 | Evento | Destinatarios | Cuándo | `datos` |
 |--------|---------------|--------|---------|
+| `conexion.establecida` | El propio socket | Al conectarse (confirma canal vivo) | `{rol}` |
 | `solicitud.creada` | **Solo admins** | Un cliente crea una solicitud pendiente | `{solicitud_id, usuario: {id, nombre}, total, creado_en, resumen: [{producto_id, nombre, cantidad}]}` |
 | `solicitud.pagada` | Todos (broadcast) | El admin presiona "Pagado" | `{solicitud_id, usuario_id, pagada_en}` |
 | `solicitud.cancelada` | Todos (broadcast) | Una solicitud pendiente se cancela | `{solicitud_id, usuario_id, por: "cliente" | "admin"}` |

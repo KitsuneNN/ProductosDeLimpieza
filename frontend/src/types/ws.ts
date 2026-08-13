@@ -1,5 +1,5 @@
 // Tipos de eventos WebSocket — espejo de docs/WS_EVENTS.md (contrato ARQ-T2)
-import type { Disponibilidad } from "./common";
+import type { Disponibilidad, RolUsuario } from "./common";
 
 export interface ResumenProductoWs {
   producto_id: number;
@@ -32,7 +32,12 @@ export interface StockActualizadoDatos {
   productos: { producto_id: number; disponibilidad: Disponibilidad }[];
 }
 
+export interface ConexionEstablecidaDatos {
+  rol: RolUsuario;
+}
+
 export type WsEvento =
+  | { evento: "conexion.establecida"; datos: ConexionEstablecidaDatos }
   | { evento: "solicitud.creada"; datos: SolicitudCreadaDatos }
   | { evento: "solicitud.pagada"; datos: SolicitudPagadaDatos }
   | { evento: "solicitud.cancelada"; datos: SolicitudCanceladaDatos }
