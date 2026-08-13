@@ -19,6 +19,8 @@
 | 2026-08-13 | Fix preview en blanco (allowedDevOrigins) | ✅ |
 | 2026-08-13 | Fix catálogo inaccesible: entorno reconstruido + admin puede ver catálogo | ✅ |
 | 2026-08-13 | **MERGE a main**: primera entrega completa en la rama principal | ✅ |
+| 2026-08-13 | Pull del commit externo `f33e23d` (FrontFuncional) + análisis de diff | ✅ |
+| 2026-08-13 | Fix hidratación bloqueada: `127.0.0.1` agregado a allowedDevOrigins (chunks 403 → 200) | ✅ |
 
 ## 🧪 Cómo probar el sistema ahora (preview Arena)
 1. Abrir el preview **Frontend** (puerto 3000).
@@ -50,6 +52,8 @@
 10. **Catálogo "inaccesible"**: el sandbox se reinicia entre turnos → PostgreSQL, `.venv`, `node_modules` y los servidores desaparecen. Solución: `scripts/iniciar_dev.sh` ahora reconstruye TODO (instala PG si falta, migra, siembra, admin, deps front). Además: el admin ya puede recorrer `/cliente/*` (vista cliente) y hay botón "Ver catálogo" en su panel.
 11. localStorage blindado (try/catch) en `lib/auth.ts` y `lib/cart.ts` (iframes sandboxeados lanzan SecurityError).
 12. Permisos SSH restaurados por el snapshot (0644) → OpenSSH ignoraba la llave; `iniciar_dev.sh` ahora los corrige (chmod 600) y re-registra el remoto git si falta.
+13. **Chunks 403 con Origin `127.0.0.1`** (Next 16 no incluye la IP local en `allowedDevOrigins` por defecto; el `--hostname 0.0.0.0` tampoco la cubre) → React nunca hidrataba y TODAS las pantallas quedaban congeladas en "Cargando…". Fix: `allowedDevOrigins: ["*.e2b.app", "*.e2b.dev", "127.0.0.1", "localhost"]`. Verificado con navegador real (Playwright): 6/6 checks E2E.
+14. Commit externo del dueño `f33e23d` ("FrontFuncional") integrado en main: fix REAL al guard de sesión del layout cliente (rutas públicas `/cliente/login` y `/cliente/registro` ya no caen en el loop de "Cargando…" del guard), favicon (`icon.svg` + `favicon.ico`) y archivos de reglas para agentes IA (`AGENTS.md`, `CLAUDE.md` generados por Next 16). Revisado y validado por el Chef.
 
 ## 📂 Convenciones del repo
 - Rama default: `main` (⚠️ pendiente cambio en GitHub Settings — la default sigue siendo la rama de test)

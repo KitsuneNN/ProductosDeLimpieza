@@ -4,11 +4,13 @@ import type { NextConfig } from "next";
 const API_URL = process.env.API_URL ?? "http://127.0.0.1:8000";
 
 const nextConfig: NextConfig = {
-  // El preview de Arena sirve la app bajo un host proxy (https://<puerto>-<id>.e2b.app).
   // Next.js 16 bloquea por defecto los recursos de desarrollo (chunks JS, HMR)
-  // cuando el Origin difiere del host del dev server → página en blanco.
-  // Esto autoriza explícitamente esos orígenes.
-  allowedDevOrigins: ["*.e2b.app", "*.e2b.dev"],
+  // cuando el Origin del navegador no está permitido. Se necesitan:
+  //  - "127.0.0.1" y "localhost": orígenes del navegador local (sin esto, React
+  //    nunca hidrata → pantallas congeladas en "Cargando…").
+  //  - "*.e2b.app" / "*.e2b.dev": hosts del preview de Arena (el dev server
+  //    corre con --hostname 0.0.0.0 y el preview llega vía host proxy).
+  allowedDevOrigins: ["*.e2b.app", "*.e2b.dev", "127.0.0.1", "localhost"],
 
   async rewrites() {
     return [
