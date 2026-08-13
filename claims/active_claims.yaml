@@ -1,0 +1,17 @@
+# CLAIMS ACTIVOS — Protocolo de Concurrencia (Regla 9)
+
+# Formato:
+#   <ruta_archivo>:
+#     agente: <agente>
+#     tarea: <id_tarea>
+#     desde: <ISO8601>
+#     nivel: <ALTO_RIESGO|NORMAL>
+#
+# Reglas:
+# - Un archivo solo puede tener UN claim activo.
+# - Archivos de ALTO RIESGO (config global, types compartidos, layouts, entrada principal)
+#   requieren aprobación del Chef ANTES de declarar el claim.
+# - El agente LIBERA el claim al completar (o el Chef lo libera al aprobar).
+
+claims: {}
+ultima_actualizacion: "2026-08-13T00:00:00Z"
