@@ -7,6 +7,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { getUsuario, limpiarSesion } from "@/lib/auth";
 import { leerCarrito, unidadesCarrito } from "@/lib/cart";
 
+const RUTAS_PUBLICAS = ["/cliente/login", "/cliente/registro"];
+
 const NAV = [
   { href: "/cliente/catalogo", texto: "Catálogo", icono: "🧴" },
   { href: "/cliente/carrito", texto: "Carrito", icono: "🛒" },
@@ -23,16 +25,21 @@ export default function ClienteLayout({
   const [listo, setListo] = useState(false);
   const [unidades, setUnidades] = useState(0);
 
+  const esRutaPublica = RUTAS_PUBLICAS.includes(pathname);
+
   useEffect(() => {
+    if (esRutaPublica) {
+      setListo(true);
+      return;
+    }
+
     const usuario = getUsuario();
     if (!usuario) {
       router.replace("/cliente/login");
       return;
     }
-    // El admin TAMBIÉN puede recorrer el catálogo (vista cliente) — útil para
-    // verificar qué ven los clientes. Ya no se lo expulsa hacia su panel.
     setListo(true);
-  }, [router]);
+  }, [pathname, router, esRutaPublica]);
 
   useEffect(() => {
     setUnidades(unidadesCarrito(leerCarrito()));
@@ -44,6 +51,10 @@ export default function ClienteLayout({
         Cargando…
       </div>
     );
+  }
+
+  if (esRutaPublica) {
+    return <>{children}</>;
   }
 
   const salir = () => {
