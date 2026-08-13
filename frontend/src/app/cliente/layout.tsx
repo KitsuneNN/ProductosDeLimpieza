@@ -29,10 +29,8 @@ export default function ClienteLayout({
       router.replace("/cliente/login");
       return;
     }
-    if (usuario.rol === "admin") {
-      router.replace("/admin/dashboard");
-      return;
-    }
+    // El admin TAMBIÉN puede recorrer el catálogo (vista cliente) — útil para
+    // verificar qué ven los clientes. Ya no se lo expulsa hacia su panel.
     setListo(true);
   }, [router]);
 

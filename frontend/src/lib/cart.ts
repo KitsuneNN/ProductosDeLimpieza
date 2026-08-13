@@ -1,4 +1,5 @@
 // Carrito de compras persistente (F-T2)
+// localStorage blindado: nunca debe lanzar (iframes sandboxeados, modo privado)
 export interface ItemCarrito {
   producto_id: number;
   nombre: string;
@@ -9,17 +10,43 @@ export interface ItemCarrito {
 
 const CLAVE = "pl_carrito";
 
-export function leerCarrito(): ItemCarrito[] {
-  if (typeof window === "undefined") return [];
+function leerCrudo(): string | null {
   try {
-    return JSON.parse(localStorage.getItem(CLAVE) ?? "[]") as ItemCarrito[];
+    if (typeof window === "undefined") return null;
+    return window.localStorage.getItem(CLAVE);
+  } catch {
+    return null;
+  }
+}
+
+function escribirCrudo(valor: string): void {
+  try {
+    if (typeof window === "undefined") return;
+    window.localStorage.setItem(CLAVE, valor);
+  } catch {
+    // sin persistencia disponible
+  }
+}
+
+function borrarCrudo(): void {
+  try {
+    if (typeof window === "undefined") return;
+    window.localStorage.removeItem(CLAVE);
+  } catch {
+    // nada que borrar
+  }
+}
+
+export function leerCarrito(): ItemCarrito[] {
+  try {
+    return JSON.parse(leerCrudo() ?? "[]") as ItemCarrito[];
   } catch {
     return [];
   }
 }
 
 function guardar(items: ItemCarrito[]): void {
-  localStorage.setItem(CLAVE, JSON.stringify(items));
+  escribirCrudo(JSON.stringify(items));
 }
 
 export function agregarAlCarrito(item: ItemCarrito): void {
@@ -45,7 +72,7 @@ export function quitarDelCarrito(producto_id: number): void {
 }
 
 export function vaciarCarrito(): void {
-  localStorage.removeItem(CLAVE);
+  borrarCrudo();
 }
 
 export function totalCarrito(items: ItemCarrito[]): number {

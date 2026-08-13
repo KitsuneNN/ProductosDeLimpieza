@@ -68,6 +68,14 @@ export default function AdminLayout({
           aria-label="Navegación del administrador"
           className="flex gap-1 overflow-x-auto px-2 pb-2"
         >
+          <Link
+            href="/cliente/catalogo"
+            className="flex min-h-[44px] items-center gap-1.5 whitespace-nowrap rounded-xl px-3 text-sm font-bold text-emerald-700 hover:bg-emerald-50"
+            aria-label="Ver catálogo como lo ven los clientes"
+          >
+            <span aria-hidden>🛒</span>
+            Ver catálogo
+          </Link>
           {NAV.map((item) => {
             const activo = pathname.startsWith(item.href);
             return (

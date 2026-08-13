@@ -1,18 +1,45 @@
 // Sesión del usuario en localStorage (F-T1)
+// Acceso blindado: en iframes sandboxeados sin allow-same-origin el acceso a
+// localStorage LANZA SecurityError — nunca debe tumbar la app.
 import type { UsuarioPublic } from "@/types";
 
 const CLAVE_TOKEN = "pl_token";
 const CLAVE_USUARIO = "pl_usuario";
 
+function leer(clave: string): string | null {
+  try {
+    if (typeof window === "undefined") return null;
+    return window.localStorage.getItem(clave);
+  } catch {
+    return null;
+  }
+}
+
+function escribir(clave: string, valor: string): void {
+  try {
+    if (typeof window === "undefined") return;
+    window.localStorage.setItem(clave, valor);
+  } catch {
+    // sin persistencia disponible: la sesión vive solo en memoria de React
+  }
+}
+
+function borrar(clave: string): void {
+  try {
+    if (typeof window === "undefined") return;
+    window.localStorage.removeItem(clave);
+  } catch {
+    // nada que borrar
+  }
+}
+
 export function getToken(): string | null {
-  if (typeof window === "undefined") return null;
-  return localStorage.getItem(CLAVE_TOKEN);
+  return leer(CLAVE_TOKEN);
 }
 
 export function getUsuario(): UsuarioPublic | null {
-  if (typeof window === "undefined") return null;
   try {
-    const crudo = localStorage.getItem(CLAVE_USUARIO);
+    const crudo = leer(CLAVE_USUARIO);
     return crudo ? (JSON.parse(crudo) as UsuarioPublic) : null;
   } catch {
     return null;
@@ -20,13 +47,13 @@ export function getUsuario(): UsuarioPublic | null {
 }
 
 export function guardarSesion(token: string, usuario: UsuarioPublic): void {
-  localStorage.setItem(CLAVE_TOKEN, token);
-  localStorage.setItem(CLAVE_USUARIO, JSON.stringify(usuario));
+  escribir(CLAVE_TOKEN, token);
+  escribir(CLAVE_USUARIO, JSON.stringify(usuario));
 }
 
 export function limpiarSesion(): void {
-  localStorage.removeItem(CLAVE_TOKEN);
-  localStorage.removeItem(CLAVE_USUARIO);
+  borrar(CLAVE_TOKEN);
+  borrar(CLAVE_USUARIO);
 }
 
 export function destinoSegunRol(usuario: UsuarioPublic): string {
