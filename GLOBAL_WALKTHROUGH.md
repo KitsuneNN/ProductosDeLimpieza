@@ -13,9 +13,11 @@
 | 2026-08-13 | Requisitos recibidos + equipo de 5 agentes aprobado | ✅ |
 | 2026-08-13 | ADR-001 ACEPTADO: Next.js 16 (UI) + FastAPI (API) + PostgreSQL + Cloudinary | ✅ |
 | 2026-08-13 | ARQ-T1 (modelo de datos) y ARQ-T2 (contratos) | ✅ (2 auditorías) |
-| 2026-08-13 | B-T1 (scaffold) + B-T2 (auth) + B-T3 (productos) + B-T4 (catálogo) + B-T5 (solicitudes) + B-T6 (pago+WS) | ✅ E2E 11/11 |
-| 2026-08-13 | F-T1..F-T4: Next.js 16 completo (cliente + admin + QR) | 🟩 ESPERANDO_APROBACIÓN |
+| 2026-08-13 | B-T1..B-T6: API completa (auth, productos, catálogo, solicitudes, pago+WS) | ✅ E2E 11/11 |
+| 2026-08-13 | F-T1..F-T4: Next.js 16 completo (cliente + admin + QR) | ✅ |
 | 2026-08-13 | QA-T1: pytest 28 tests, services 95% | ✅ |
+| 2026-08-13 | Fix preview en blanco (allowedDevOrigins) | ✅ |
+| 2026-08-13 | Fix catálogo inaccesible: entorno reconstruido (sandbox se reinicia entre turnos) + admin puede ver catálogo | ✅ |
 
 ## 🧪 Cómo probar el sistema ahora (preview Arena)
 1. Abrir el preview **Frontend** (puerto 3000).
@@ -44,6 +46,9 @@
 7. `viewport.maximumScale=1` (bloqueaba zoom → violación a11y) → eliminado.
 8. Fallback WS a `ws://localhost:8000` (muerto en el navegador del usuario) → ruta relativa `/ws` única + `NEXT_PUBLIC_WS_URL` opcional.
 9. Next 16 ya no corre `tsc` en `next build` → script `npm run typecheck` agregado (0 errores).
+10. **Catálogo "inaccesible"**: el sandbox se reinicia entre turnos → PostgreSQL, `.venv`, `node_modules` y los servidores desaparecen. Solución: `scripts/iniciar_dev.sh` ahora reconstruye TODO (instala PG si falta, migra, siembra, admin, deps front). Además: el admin ya puede recorrer `/cliente/*` (vista cliente) y hay botón "Ver catálogo" en su panel.
+11. localStorage blindado (try/catch) en `lib/auth.ts` y `lib/cart.ts` (iframes sandboxeados lanzan SecurityError).
+12. Permisos SSH restaurados por el snapshot (0644) → OpenSSH ignoraba la llave; `iniciar_dev.sh` ahora los corrige (chmod 600) y re-registra el remoto git si falta.
 
 ## 📂 Convenciones del repo
 - Rama default: `main` (⚠️ pendiente cambio en GitHub Settings — la default sigue siendo la rama de test)

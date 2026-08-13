@@ -24,6 +24,14 @@ sudo -u postgres psql -tc "SELECT 1 FROM pg_roles WHERE rolname='limpieza'" | gr
 sudo -u postgres psql -tc "SELECT 1 FROM pg_database WHERE datname='limpieza'" | grep -q 1 || \
   sudo -u postgres psql -c "CREATE DATABASE limpieza OWNER limpieza;"
 
+echo "1b/6 · Claves y git (el snapshot puede restaurar permisos abiertos)"
+chmod 600 "$HOME/.ssh/github_deploy_key" "$HOME/.ssh/config" 2>/dev/null || true
+cd "$RAIZ"
+git config user.name "Chef Master (Arena Agent)" 2>/dev/null || true
+git config user.email "chef-master@arena.workspace" 2>/dev/null || true
+git remote get-url origin >/dev/null 2>&1 || \
+  git remote add origin git@github.com:KitsuneNN/ProductosDeLimpieza.git
+
 echo "2/6 · Dependencias + migraciones + seed"
 cd "$RAIZ/backend"
 [ -d .venv ] || python3 -m venv .venv
